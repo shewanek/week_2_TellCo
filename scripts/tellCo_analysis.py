@@ -26,7 +26,8 @@ class TellCoEDA:
             ], 
             inplace=True
         )
+        # drop low and high cardinallity catagroial varaible
+        self.df.drop(columns = ["Last Location Name"], inplace=True)
         # self.df.fillna(self.df.mean(), inplace=True)
         # self.df.drop_duplicates(inplace=True)
         return self.df
-
