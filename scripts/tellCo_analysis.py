@@ -120,3 +120,41 @@ class TellCoEDA:
         plt.ylabel('PC2')
         plt.colorbar()
         plt.show()
+
+    def marketing_insights(self):
+        # Get the top 10 handsets and top 3 manufacturers
+        top_10_handsets = self.df['Handset Type'].value_counts().head(10)
+        top_3_manufacturers = self.df['Handset Manufacturer'].value_counts().head(3)
+
+        # Dictionary to store top handsets for each of the top 3 manufacturers
+        top_handsets_per_manufacturer = {}
+        for manufacturer in top_3_manufacturers.index:
+            top_handsets_per_manufacturer[manufacturer] = self.df[self.df['Handset Manufacturer'] == manufacturer]['Handset Type'].value_counts().head(5)
+
+        # Plot the top 10 handsets
+        plt.figure(figsize=(10, 6))
+        sns.barplot(x=top_10_handsets.values, y=top_10_handsets.index)
+        plt.title('Top 10 Handsets by Usage')
+        plt.xlabel('Number of Users')
+        plt.ylabel('Handset Type')
+        plt.show()
+
+        # Plot the top 3 manufacturers
+        plt.figure(figsize=(8, 4))
+        sns.barplot(x=top_3_manufacturers.values, y=top_3_manufacturers.index)
+        plt.title('Top 3 Handset Manufacturers by Usage')
+        plt.xlabel('Number of Users')
+        plt.ylabel('Manufacturer')
+        plt.show()
+
+        # Plot the top handsets for each of the top 3 manufacturers
+        for manufacturer, handsets in top_handsets_per_manufacturer.items():
+            plt.figure(figsize=(8, 4))
+            sns.barplot(x=handsets.values, y=handsets.index)
+            plt.title(f'Top 5 Handsets for {manufacturer}')
+            plt.xlabel('Number of Users')
+            plt.ylabel('Handset Type')
+            plt.show()
+
+        return top_10_handsets, top_3_manufacturers, top_handsets_per_manufacturer
+
