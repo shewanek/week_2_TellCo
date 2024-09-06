@@ -47,3 +47,36 @@ class TellCoEDA:
         self.df[numeric_cols] = self.df[numeric_cols].fillna(self.df[numeric_cols].mean())
 
         return self.df
+
+
+
+
+    def transform_data(self):
+        # Create a new column for Total Data Volume
+        self.df['Total Data Volume'] = self.df['Total UL (Bytes)'] + self.df['Total DL (Bytes)']
+        
+        # Create decile groups for Duration, handling duplicate bin edges
+        self.df['Duration Decile'] = pd.qcut(self.df['Dur. (s)'], 10, labels=False, duplicates='drop')
+        
+        return self.df
+
+
+    # Step 4: Univariate Analysis
+    def univariate_analysis(self):
+        mean_duration = self.df['Dur. (s)'].mean()
+        median_duration = self.df['Dur. (s)'].median()
+        variance_duration = self.df['Dur. (s)'].var()
+         # Print statistics
+        print(f"Mean Duration: {mean_duration}")
+        print(f"Median Duration: {median_duration}")
+        print(f"Variance Duration: {variance_duration}")
+
+        plt.figure(figsize=(10, 5))
+        sns.histplot(self.df['Dur. (s)'], bins=20, kde=True)
+        plt.title('Distribution of Session Duration')
+        plt.show()
+
+        plt.figure(figsize=(10, 5))
+        sns.boxplot(x=self.df['Dur. (s)'])
+        plt.title('Boxplot of Session Duration')
+        plt.show()
