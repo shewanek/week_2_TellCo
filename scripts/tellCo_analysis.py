@@ -8,7 +8,7 @@ class TellCoEDA:
     def __init__(self, df):
         self.df = df
 
-    # Step 1: Data wangleing 
+    # Data wangleing 
     def wrangle(self):
         # Drop the features with high null values
         self.df.drop(
@@ -61,7 +61,7 @@ class TellCoEDA:
         return self.df
 
 
-    # Step 4: Univariate Analysis
+    # Univariate Analysis
     def univariate_analysis(self):
         mean_duration = self.df['Dur. (s)'].mean()
         median_duration = self.df['Dur. (s)'].median()
@@ -79,4 +79,44 @@ class TellCoEDA:
         plt.figure(figsize=(10, 5))
         sns.boxplot(x=self.df['Dur. (s)'])
         plt.title('Boxplot of Session Duration')
+        plt.show()
+
+    # Bivariate Analysis
+    def bivariate_analysis(self):
+        applications = ['Social Media DL (Bytes)', 'Google DL (Bytes)', 'Email DL (Bytes)', 'Youtube DL (Bytes)',
+                        'Netflix DL (Bytes)', 'Gaming DL (Bytes)', 'Other DL (Bytes)']
+        for app in applications:
+            plt.figure(figsize=(10, 5))
+            sns.scatterplot(x=self.df[app], y=self.df['Total Data Volume'])
+            plt.title(f'{app} vs Total Data Volume')
+            plt.show()
+
+    # Correlation Analysis
+    def correlation_analysis(self):
+        applications = ['Social Media DL (Bytes)', 'Google DL (Bytes)', 'Email DL (Bytes)', 'Youtube DL (Bytes)',
+                        'Netflix DL (Bytes)', 'Gaming DL (Bytes)', 'Other DL (Bytes)']
+        app_data = self.df[applications]
+        correlation_matrix = app_data.corr()
+
+        plt.figure(figsize=(12, 8))
+        sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm')
+        plt.title('Correlation Matrix of Application Data Usage')
+        plt.show()
+
+    #  Dimensionality Reduction using PCA
+    def perform_pca(self):
+        applications = ['Social Media DL (Bytes)', 'Google DL (Bytes)', 'Email DL (Bytes)', 'Youtube DL (Bytes)',
+                        'Netflix DL (Bytes)', 'Gaming DL (Bytes)', 'Other DL (Bytes)']
+        scaler = StandardScaler()
+        scaled_data = scaler.fit_transform(self.df[applications])
+
+        pca = PCA(n_components=2)
+        pca_result = pca.fit_transform(scaled_data)
+
+        plt.figure(figsize=(10, 5))
+        plt.scatter(pca_result[:, 0], pca_result[:, 1], c=self.df['Duration Decile'], cmap='viridis', s=50)
+        plt.title('PCA Result: Data Usage')
+        plt.xlabel('PC1')
+        plt.ylabel('PC2')
+        plt.colorbar()
         plt.show()
