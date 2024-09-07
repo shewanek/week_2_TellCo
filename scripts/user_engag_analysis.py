@@ -23,3 +23,12 @@ class User_Engag_Analysis:
         
         self.agg_df['total_traffic'] = self.agg_df['total_dl'] + self.agg_df['total_ul']
         return self.agg_df
+
+    def normalize_metrics(self):
+        """Normalize each engagement metric."""
+        scaler = MinMaxScaler()
+        self.agg_df[['total_duration', 'total_dl', 'total_ul', 'total_traffic']] = scaler.fit_transform(
+            self.agg_df[['total_duration', 'total_dl', 'total_ul', 'total_traffic']])
+        return self.agg_df
+
+    
