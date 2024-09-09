@@ -46,6 +46,9 @@ class TellCoEDA:
         numeric_cols = self.df.select_dtypes(include=['float64', 'int64']).columns
         self.df[numeric_cols] = self.df[numeric_cols].fillna(self.df[numeric_cols].mean())
 
+        # Replace missing categorical values with the mode
+        self.df['Handset Type'].fillna(self.df['Handset Type'].mode()[0], inplace=True)
+
         return self.df
 
 
