@@ -128,4 +128,6 @@ pip install -r requirements.txt
 
 For any questions or issues, please contact [zshewanek@gmail.com](mailto:zshewanek@gmail.com).
 
+Connect with me on [LinkedIn](https://www.linkedin.com/in/shewanek-zewdu/).
+
 ---
