@@ -51,4 +51,38 @@ class SatisfactionAnalysis:
         print("Engagement and experience scores assigned to users.")
 
 
+    def calculate_satisfaction(self):
+        # Calculate satisfaction score as the average of engagement and experience scores
+        self.clean_df['satisfaction_score'] = (self.clean_df['engagement_score'] + self.clean_df['experience_score']) / 2
+        
+        # Get top 10 satisfied customers
+        top_10_satisfied = self.clean_df[['MSISDN/Number', 'satisfaction_score']].sort_values(by='satisfaction_score', ascending=False).head(10)
+        
+        print("Top 10 satisfied customers:")
+        print(top_10_satisfied)
+        
+        return top_10_satisfied
+
+    def train_regression_model(self):
+        # Features: engagement and experience scores
+        X = self.clean_df[['engagement_score', 'experience_score']]
+        y = self.clean_df['satisfaction_score']
+        
+        # Train-test split
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+        
+        # Train linear regression model
+        model = LinearRegression()
+        model.fit(X_train, y_train)
+        
+        # Evaluate the model
+        y_pred = model.predict(X_test)
+        mse = mean_squared_error(y_test, y_pred)
+        r2 = r2_score(y_test, y_pred)
+        
+        print(f"Model MSE: {mse}")
+        print(f"Model R2 score: {r2}")
+        
+        return model
+
     
