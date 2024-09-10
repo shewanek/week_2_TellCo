@@ -85,4 +85,30 @@ class SatisfactionAnalysis:
         
         return model
 
+    def kmeans_on_scores(self):
+        # Engagement and experience scores
+        score_columns = ['engagement_score', 'experience_score']
+        scaled_scores = StandardScaler().fit_transform(self.clean_df[score_columns])
+        
+        # KMeans clustering (K=2)
+        kmeans = KMeans(n_clusters=2, random_state=0).fit(scaled_scores)
+        
+        # Assign clusters
+        self.clean_df['satisfaction_cluster'] = kmeans.labels_
+        
+        print("K-Means clustering on engagement and experience scores done.")
+
+    def aggregate_scores_per_cluster(self):
+        # Aggregate satisfaction and experience scores per cluster
+        cluster_aggregation = self.clean_df.groupby('satisfaction_cluster').agg({
+            'satisfaction_score': ['mean', 'std'],
+            'experience_score': ['mean', 'std']
+        }).reset_index()
+        
+        print("Satisfaction and experience scores per cluster:")
+        print(cluster_aggregation)
+        
+        return cluster_aggregation
+
+
     
